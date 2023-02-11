@@ -1,9 +1,10 @@
 import { Router  } from 'express';
 import { createRocket } from './rocket.controller';
 import { getRocket } from './get.controller';
-
+ const middlewareFuncs= require('../middleware/checkWalletHeader')
 const createRouter = Router();
 
+createRouter.use(middlewareFuncs.checkWalletHeader)
 // Create and receive a new rocket
 createRouter.post('/', createRocket)
 
