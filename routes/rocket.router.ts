@@ -1,6 +1,6 @@
 import { Router  } from 'express';
 import { createRocket } from './rocket.controller';
-import { getRocket } from './get.controller';
+import { getRocket } from './rocket.controller';
  const middlewareFuncs= require('../middleware/checkWalletHeader')
 const createRouter = Router();
 
