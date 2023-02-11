@@ -1,5 +1,10 @@
 import { Request, Response } from 'express';
 import { request } from 'http';
+import {ImmutableX, Config } from "@imtbl/core-sdk";
+
+
+const config = Config.SANDBOX; // Or Config.PRODUCTION
+const client = new ImmutableX(config);
 
 function getRocket(Request: Request, Response: Response) {
     if (Request.headers.wallet_address) {
