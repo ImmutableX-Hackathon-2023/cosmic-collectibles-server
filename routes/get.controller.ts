@@ -23,11 +23,11 @@ const getListAssets = async (
     collectionAddress: string,
     orderBy: 'updated_at' | 'name'
   ) => {
-    const response = await client.listAssets({
-      collection: collectionAddress,
-      orderBy: orderBy,
-    });
-    return response.result;
+    // const response = await client.listAssets({
+    //   collection: collectionAddress,
+    //   orderBy: orderBy,
+    // });
+    // return response.result;
   };
 
 

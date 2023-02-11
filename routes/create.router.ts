@@ -7,6 +7,6 @@ const createRouter = Router();
 // Create and receive a new rocket
 createRouter.post('/rocket', createRocket)
 
-createRouter.post('/rocket', getRocket)
+createRouter.get('/rocket', getRocket)
 
 export default createRouter

@@ -14,7 +14,7 @@ interface METADATA_TEMPLATE {
 
 // Call with a wallet address to receive a blank, level 1 rocket.
 function createRocket(req: Request, res: Response) {
-    res.send(req.headers);
+    
 }
 
 export {
