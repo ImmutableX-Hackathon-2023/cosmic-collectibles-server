@@ -4,6 +4,7 @@ import { getRocket } from './get.controller';
 
 const createRouter = Router();
 
+// Create and receive a new rocket
 createRouter.post('/rocket', createRocket)
 
 createRouter.post('/rocket', getRocket)
