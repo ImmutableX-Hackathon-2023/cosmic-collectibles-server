@@ -2,18 +2,17 @@ import { Request, Response } from 'express';
 import { request } from 'http';
 
 function getRocket(Request: Request, Response: Response) {
-    if (Request.headers.wallet_address) {
-      const wallet_address = Request.headers.wallet_address[0];
-      getListAssets(wallet_address, 'name')
-      .then((result) => {
-        //print the result
-        console.log(result);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    }
-    
+    if (Request.headers.wallet_address && Request.headers.wallet_address[0]) {
+        const wallet_address = Request.headers.wallet_address[0];
+        getListAssets(wallet_address, 'name')
+        .then((result) => {
+          //print the result
+          console.log(result);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      }
 }
 
 export {
