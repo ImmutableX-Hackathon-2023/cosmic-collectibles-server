@@ -22,7 +22,8 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "helmet": "^6.0.1",
-    "http": "^0.0.1-security"
+    "http": "^0.0.1-security",
+    "ts-node": "^10.9.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
