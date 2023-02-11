@@ -19,10 +19,8 @@ interface METADATA_TEMPLATE {
 
 // Call with a wallet address to receive a blank, level 1 rocket.
 function createRocket(req: Request, res: Response) {
-    const wallet_address = req.headers.wallet_address;
-    
+    const wallet_address = req.headers.wallet_address;   
 }
-
 
 function getRocket(Request: Request, Response: Response) {
     if (Request.headers.wallet_address && Request.headers.wallet_address[0]) {
