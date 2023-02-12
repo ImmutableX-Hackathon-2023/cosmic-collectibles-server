@@ -34,6 +34,7 @@ const component = '[IMX-UPDATE-COLLECTION]';
    */
   const params: UpdateCollectionParams = {
     name: 'COSMIC-COLLECTIBLES',
+    metadata_api_url: 'http://88.198.184.61:4000'
   };
 
   let collection;

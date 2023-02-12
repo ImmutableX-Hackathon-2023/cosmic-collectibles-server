@@ -50,8 +50,8 @@ const component = '[IMX-UPDATE-COLLECTION-METADATA-SCHEMA]';
    * Edit your values here
    */
   const params: UpdateMetadataSchemaByNameParams = {
-    name: 'Health',
-    type: MetadataTypes.Discrete,
+    name: 'Name',
+    type: MetadataTypes.Text,
     filterable: true,
   };
 
