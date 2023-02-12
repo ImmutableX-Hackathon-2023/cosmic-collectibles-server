@@ -5,6 +5,8 @@ import {ImmutableX, Config} from "@imtbl/core-sdk";
 const config = Config.SANDBOX; // Or Config.PRODUCTION
 const client = new ImmutableX(config);
 
+const CONTRACT_ADDRESS = '0x2021ca07c0be453ff54ddcc3b6d05f53eaf561b0';
+
 interface METADATA_TEMPLATE {
     id: number,
     name: string,
@@ -105,7 +107,7 @@ interface allRocketsResult {
 async function getRocket(req:Request, res:Response){
   console.log("In getRocket")
   try{
-    const fetchResult = await fetch(`https://api.sandbox.x.immutable.com/v1/assets?collection=0x2021ca07c0be453ff54ddcc3b6d05f53eaf561b0`, {
+    const fetchResult = await fetch(`https://api.sandbox.x.immutable.com/v1/assets?collection=${CONTRACT_ADDRESS}`, {
     method:'GET',
     }
     );
