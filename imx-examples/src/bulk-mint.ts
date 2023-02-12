@@ -73,7 +73,7 @@ const waitForTransaction = async (promise: Promise<string>) => {
   log.info(component, `OFF-CHAIN MINT ${number} NFTS`);
 
   const tokens = Array.from({ length: number }, (_, i) => i).map(i => ({
-    id: (tokenId + i).toString(),
+    id: (tokenId + (i+5)).toString(),
     blueprint: 'onchain-metadata',
   }));
 

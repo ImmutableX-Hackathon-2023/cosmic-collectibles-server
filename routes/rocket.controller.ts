@@ -28,6 +28,7 @@ const getListAssets = async (
     user:walletAddress,
     orderBy: orderBy,
   });
+  console.log(response);
   return response.result;
 };
 
@@ -66,22 +67,18 @@ function createRocket(req: Request, res: Response) {
 //       }
 // }
 async function getRocket(req: Request, res: Response) {
-      console.log("In getRocket")
-      console.log("Inside if getRocket branch")
-      const collection_address = req.headers.collection_address as string;
+    const collection_address = req.headers.collection_address as string;
 
-        const wallet_address_header = req.headers.wallet_address;
-        const wallet_address = wallet_address_header![0];
-          
-        try{
-        const result = await getListAssets(collection_address,'name',wallet_address)
-        console.log(result);
-        console.log("You are in the try something");
-        return res.status(200).json({"msg":result});
-        }
-        catch(error){
-          return res.status(400).json(error);
-        }
+    const wallet_address_header = req.headers.wallet_address;
+    const wallet_address = wallet_address_header![0];
+      
+    try{
+    const result = await getListAssets(collection_address,'name',wallet_address)
+    return res.status(200).json({"msg":result});
+    }
+    catch(error){
+      return res.status(400).json(error);
+    }
 }
 
 
