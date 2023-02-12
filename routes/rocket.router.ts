@@ -1,5 +1,5 @@
 import { Router  } from 'express';
-import { getRocket, createRocket, getRocketByid } from './rocket.controller';
+import { getRocket, createRocket, getRocketByid, updateRocket } from './rocket.controller';
  const middlewareFuncs= require('../middleware/checkWalletHeader')
 const createRouter = Router();
 
@@ -9,6 +9,9 @@ createRouter.use(middlewareFuncs.checkWalletHeader)
 
 createRouter.get('/', getRocket)
 
+createRouter.post('/updateMetaData', updateRocket)
+
 createRouter.get('/:id', getRocketByid)
+
 
 export default createRouter

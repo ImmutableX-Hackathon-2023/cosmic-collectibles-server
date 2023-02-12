@@ -11,8 +11,8 @@ app.use(helmet({
     crossOriginResourcePolicy: false,
 }))
 app.use(cors())
-app.use('/rocket', rocketRouter)
 app.use(express.json());
+app.use('/rocket', rocketRouter)
 app.use(express.urlencoded({extended: false}))
 
 
