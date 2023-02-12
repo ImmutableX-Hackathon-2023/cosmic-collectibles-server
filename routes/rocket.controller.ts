@@ -1,10 +1,13 @@
 import { Request, Response } from 'express';
-import { Wallet as EthersWallet, AlchemyProvider, Provider } from 'ethers';
-import {ImmutableX, Config, MintUser, CreateExchangeAndURLAPIRequestProviderEnum, Mint, UnsignedMintRequest, generateStarkPrivateKey, createStarkSigner} from "@imtbl/core-sdk";
+import { AlchemyProvider } from '@ethersproject/providers';
+import {ImmutableX, Config, MintUser, CreateExchangeAndURLAPIRequestProviderEnum, Mint, UnsignedMintRequest, generateStarkPrivateKey, createStarkSigner, EthSigner} from "@imtbl/core-sdk";
 import { ImmutableMethodParams, ImmutableXClient } from "@imtbl/imx-sdk";
 import axios from 'axios'
+import { config as envConfig } from 'dotenv';
+import env from '../config/client';
+var spawn = require('child_process').spawn;
 import sqlite3 from 'sqlite3'
-import { Wallet } from 'ethers';
+import { Wallet } from '@ethersproject/wallet';
 import { v4 as uuid } from 'uuid';
 import { keccak256 } from '@ethersproject/keccak256';
 import { toUtf8Bytes } from '@ethersproject/strings';
@@ -59,11 +62,38 @@ const getListAssetsByid = async (
   return response.result[id];
 }; 
 
-// Call with a wallet address to receive a blank, level 1 rocket.
-async function createRocket(req: Request, res: Response) {
+// Call with a wallet address to mint and receive a blank, level 1 rocket.
+async function createRocket(req: Request, res: Response) {  
+try {
+    const provider = new AlchemyProvider(env.ethNetwork, env.alchemyApiKey);
 
-  // mintFunc(req.headers.wallet_address as);
+    const minter = await ImmutableXClient.build({
+      ...env.client,
+      signer: new Wallet(env.privateKey1 as string).connect(provider),
+    });
 
+    const registerImxResult = await minter.registerImx({
+      etherKey: minter.address.toLowerCase(),
+      starkPublicKey: minter.starkPublicKey,
+    });
+
+    const payload: ImmutableMethodParams.ImmutableOffchainMintV2ParamsTS = [
+      {
+        contractAddress: env.tokenAddress as string, // NOTE: a mintable token contract is not the same as regular erc token contract
+        users: [
+          {
+            etherKey: (req.headers.wallet_address as string).toLowerCase(),
+            tokens: [{id: '1001', blueprint: 'onchain-metadata'}]
+          },
+        ],
+      },
+    ];
+
+    const result = await minter.mintV2(payload);
+    res.status(200).json(result);
+} catch (err) {
+  res.status(400).json(err);
+}
 
 }
 
@@ -78,29 +108,19 @@ function updateRocket(req: Request, res: Response) {
     console.log(`description:${description}`);
 
 
-
-
-    db.all("UPDATE rockets SET name=$1,description=$2,image_url=$3,health=$4,fuel = $5,speed = $6,rating= $7 WHERE id=$8",  [name, description, image_url, health, fuel 
-      , speed, rating, id], function(err:any){
-        if(err){
-          return res.status(400).json(err)
-        }
-        else{
-          return res.status(200).json({"mssg":"Succesful Update"})
-        }
-      })
+  db.all("UPDATE rockets SET name=$1,description=$2,image_url=$3,health=$4,fuel = $5,speed = $6,rating= $7 WHERE id=$8",  [name, description, image_url, health, fuel 
+    , speed, rating, id], function(err:any){
+      if(err){
+        return res.status(400).json(err)
+      }
+      else{
+        return res.status(200).json({"msg":"Succesful Update"})
+      }
+    })
 }
 
 // Called after a game, to save final state to blockchain
 async function pushRocketToBlockchain(req: Request, res: Response) {
-  console.log('in push route')
-  console.log(req.headers.wallet_address)
-  let avg;
-  // Calculate a final game rating based on average of attributes, decide if rocket levels up
-  const result = db.all(`SELECT health, fuel, speed FROM rockets WHERE user_id=$1`, [req.headers.wallet_address], (err, rows) => {
-    avg = (((rows[0].health + rows[0].fuel + rows[0].speed) / 3) / 2);
-    res.status(200).json(avg);
-  })
 
 }
 
