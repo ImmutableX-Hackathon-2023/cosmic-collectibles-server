@@ -68,21 +68,7 @@ function createRocket(req: Request, res: Response) {
 //         });
 //       }
 // }
-<<<<<<< HEAD
-async function getRocket(req: Request, res: Response) {
-    const collection_address = req.headers.collection_address as string;
 
-    const wallet_address_header = req.headers.wallet_address;
-    const wallet_address = wallet_address_header![0];
-      
-    try{
-    const result = await getListAssets(collection_address,'name',wallet_address)
-    return res.status(200).json({"msg":result});
-    }
-    catch(error){
-      return res.status(400).json(error);
-    }
-=======
 // async function getRocket(req: Request, res: Response) {
 //       console.log("In getRocket")
 //       console.log("Inside if getRocket branch")
@@ -117,7 +103,6 @@ interface allRocketsResult {
     "name": string,
     "icon_url":string
   }
->>>>>>> 05c07ad2bde7bc01bcf14244a9599680c3dd46b5
 }
 
 
