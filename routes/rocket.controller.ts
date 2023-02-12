@@ -3,6 +3,7 @@ import { AlchemyProvider } from '@ethersproject/providers';
 import {ImmutableX, Config, MintUser, CreateExchangeAndURLAPIRequestProviderEnum, Mint, UnsignedMintRequest, generateStarkPrivateKey, createStarkSigner, EthSigner} from "@imtbl/core-sdk";
 import { ImmutableMethodParams, ImmutableXClient } from "@imtbl/imx-sdk";
 import axios from 'axios'
+import crypto from 'crypto';
 import { config as envConfig } from 'dotenv';
 import env from '../config/client';
 var spawn = require('child_process').spawn;
@@ -15,6 +16,7 @@ import BN from 'bn.js'; // https://www.npmjs.com/package/bn.js
 import * as encUtils from 'enc-utils'; // https://www.npmjs.com/package/enc-utils
 import { MintBodyCodec } from 'imx-sdk';
 import { db } from '../models/seed';
+import { uuidV4 } from 'ethers/types/utils';
 const config = Config.SANDBOX; // Or Config.PRODUCTION
 const client = new ImmutableX(config);
 
@@ -83,7 +85,9 @@ try {
         users: [
           {
             etherKey: (req.headers.wallet_address as string).toLowerCase(),
-            tokens: [{id: '1001', blueprint: 'onchain-metadata'}]
+            tokens: [{id: Math.floor(
+              Math.random() * (1000000 - 800) + 800
+            ).toString(), blueprint: 'onchain-metadata'}]
           },
         ],
       },
@@ -94,19 +98,11 @@ try {
 } catch (err) {
   res.status(400).json(err);
 }
-
 }
 
 // Called during the game to update rocket attributes we need in real time.
 function updateRocket(req: Request, res: Response) {  
-    console.log("In updateRocket")
-    console.log(req.body)
   const {id, name, description, image_url, health, fuel , speed, rating}= req.body;
-  
-    console.log(req.body)
-    console.log(`id:${id}`);
-    console.log(`description:${description}`);
-
 
   db.all("UPDATE rockets SET name=$1,description=$2,image_url=$3,health=$4,fuel = $5,speed = $6,rating= $7 WHERE id=$8",  [name, description, image_url, health, fuel 
     , speed, rating, id], function(err:any){
