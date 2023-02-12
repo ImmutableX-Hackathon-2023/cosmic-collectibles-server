@@ -189,6 +189,7 @@ export {
     getRocket,
     getRocketByid,
     createRocket,
-    pushRocketToBlockchain
+    pushRocketToBlockchain,
+    updateRocket
 }
 
