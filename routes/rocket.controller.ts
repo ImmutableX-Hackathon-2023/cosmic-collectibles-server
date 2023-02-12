@@ -103,20 +103,22 @@ interface allRocketsResult {
 
 
 async function getRocket(req:Request, res:Response){
+  console.log("In getRocket")
   try{
-    const fetchResult = await fetch('https://api.sandbox.x.immutable.com/v1/assets', {
+    const fetchResult = await fetch(`https://api.sandbox.x.immutable.com/v1/assets?collection=0x2021ca07c0be453ff54ddcc3b6d05f53eaf561b0`, {
     method:'GET',
-    body:JSON.stringify({'collection':'0x2021ca07c0be453ff54ddcc3b6d05f53eaf561b0'})
     }
     );
     const data = await fetchResult.json();
-
-    data.result.filter((element: allRocketsResult) => {
+    console.log(data);
+     const newData= data.result.filter((element: allRocketsResult) => {
      return element.user === req.headers.wallet_address;
     })
+    // console.log(newData)
     return res.status(200).json(data);
   }
   catch(error){
+    console.error(error);
     return res.status(200).json(error);
   }
 }
