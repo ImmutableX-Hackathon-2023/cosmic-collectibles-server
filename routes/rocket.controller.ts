@@ -116,9 +116,8 @@ interface allRocketsResult {
 
 
 async function getRocket(req:Request, res:Response){
-  console.log("In getRocket")
   try{
-    const data = await axios.get(`https://api.sandbox.x.immutable.com/v1/assets?collection=${CONTRACT_ADDRESS}`);
+     const data = await axios.get(`https://api.sandbox.x.immutable.com/v1/assets?collection=${CONTRACT_ADDRESS}`);
      const newData= data.data.result.filter((element: allRocketsResult) => {
      return (element.user as string).toLowerCase() === (req.headers.wallet_address as string).toLowerCase();
     })
@@ -132,7 +131,7 @@ async function getRocket(req:Request, res:Response){
   }
   catch(error){
     console.error(error);
-    return res.status(200).json(error);
+    return res.status(400).json(error);
   }
 }
 
