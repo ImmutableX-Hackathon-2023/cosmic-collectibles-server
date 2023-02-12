@@ -66,6 +66,7 @@ function createRocket(req: Request, res: Response) {
 //         });
 //       }
 // }
+<<<<<<< HEAD
 async function getRocket(req: Request, res: Response) {
     const collection_address = req.headers.collection_address as string;
 
@@ -79,8 +80,63 @@ async function getRocket(req: Request, res: Response) {
     catch(error){
       return res.status(400).json(error);
     }
+=======
+// async function getRocket(req: Request, res: Response) {
+//       console.log("In getRocket")
+//       console.log("Inside if getRocket branch")
+//       const collection_address = req.headers.collection_address as string;
+
+//         const wallet_address_header = req.headers.wallet_address;
+//         const wallet_address = wallet_address_header![0];
+          
+//         try{
+//         const result = await getListAssets(collection_address,'name',wallet_address)
+//         console.log(result);
+//         console.log("You are in the try something");
+//         return res.status(200).json({"msg":result});
+//         }
+//         catch(error){
+//           return res.status(400).json(error);
+//         }
+// }
+
+interface allRocketsResult {
+  "token_address": string,
+  "token_id": string,
+  "id":string,
+  "user": string,
+  "status":string,
+  "uri": string|null,
+  "name": string|null,
+  "description": string|null,
+  "image_url": string|null,
+  "metadata":string|null,
+  "collection": {
+    "name": string,
+    "icon_url":string
+  }
+>>>>>>> 05c07ad2bde7bc01bcf14244a9599680c3dd46b5
 }
 
+
+async function getRocket(req:Request, res:Response){
+  try{
+    const fetchResult = await fetch('https://api.sandbox.x.immutable.com/v1/assets', {
+    method:'GET',
+    body:JSON.stringify({'collection':'0x2021ca07c0be453ff54ddcc3b6d05f53eaf561b0'})
+    }
+    );
+    const data = await fetchResult.json();
+
+    data.result.filter((element: allRocketsResult) => {
+     return element.user === req.headers.wallet_address;
+    })
+    return res.status(200).json(data);
+  }
+  catch(error){
+    return res.status(200).json(error);
+  }
+}
 
 
 async function getRocketByid(req: Request, res: Response) {
