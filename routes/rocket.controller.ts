@@ -110,12 +110,15 @@ async function getRocket(req:Request, res:Response){
     }
     );
     const data = await fetchResult.json();
-    console.log(data);
+    // console.log(data);
      const newData= data.result.filter((element: allRocketsResult) => {
-     return element.user === req.headers.wallet_address;
+      console.log(element.user);
+      console.log(req.headers.wallet_address);
+      console.log(' ')
+     return (element.user as string).toLowerCase() === (req.headers.wallet_address as string).toLowerCase();
     })
     // console.log(newData)
-    return res.status(200).json(data);
+    return res.status(200).json(newData);
   }
   catch(error){
     console.error(error);
