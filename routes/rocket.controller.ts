@@ -1,10 +1,13 @@
 import { Request, Response } from 'express';
-import { Wallet as EthersWallet, AlchemyProvider, Provider } from 'ethers';
-import {ImmutableX, Config, MintUser, CreateExchangeAndURLAPIRequestProviderEnum, Mint, UnsignedMintRequest, generateStarkPrivateKey, createStarkSigner} from "@imtbl/core-sdk";
+import { AlchemyProvider } from '@ethersproject/providers';
+import {ImmutableX, Config, MintUser, CreateExchangeAndURLAPIRequestProviderEnum, Mint, UnsignedMintRequest, generateStarkPrivateKey, createStarkSigner, EthSigner} from "@imtbl/core-sdk";
 import { ImmutableMethodParams, ImmutableXClient } from "@imtbl/imx-sdk";
 import axios from 'axios'
+import { config as envConfig } from 'dotenv';
+import env from '../config/client';
+var spawn = require('child_process').spawn;
 import sqlite3 from 'sqlite3'
-import { Wallet } from 'ethers';
+import { Wallet } from '@ethersproject/wallet';
 import { v4 as uuid } from 'uuid';
 import { keccak256 } from '@ethersproject/keccak256';
 import { toUtf8Bytes } from '@ethersproject/strings';
@@ -59,11 +62,38 @@ const getListAssetsByid = async (
   return response.result[id];
 }; 
 
-// Call with a wallet address to receive a blank, level 1 rocket.
-async function createRocket(req: Request, res: Response) {
+// Call with a wallet address to mint and receive a blank, level 1 rocket.
+async function createRocket(req: Request, res: Response) {  
+try {
+    const provider = new AlchemyProvider(env.ethNetwork, env.alchemyApiKey);
 
-  // mintFunc(req.headers.wallet_address as);
+    const minter = await ImmutableXClient.build({
+      ...env.client,
+      signer: new Wallet(env.privateKey1 as string).connect(provider),
+    });
 
+    const registerImxResult = await minter.registerImx({
+      etherKey: minter.address.toLowerCase(),
+      starkPublicKey: minter.starkPublicKey,
+    });
+
+    const payload: ImmutableMethodParams.ImmutableOffchainMintV2ParamsTS = [
+      {
+        contractAddress: env.tokenAddress as string, // NOTE: a mintable token contract is not the same as regular erc token contract
+        users: [
+          {
+            etherKey: (req.headers.wallet_address as string).toLowerCase(),
+            tokens: [{id: '1001', blueprint: 'onchain-metadata'}]
+          },
+        ],
+      },
+    ];
+
+    const result = await minter.mintV2(payload);
+    res.status(200).json(result);
+} catch (err) {
+  res.status(400).json(err);
+}
 
 }
 
@@ -78,17 +108,15 @@ function updateRocket(req: Request, res: Response) {
     console.log(`description:${description}`);
 
 
-
-
-    db.all("UPDATE rockets SET name=$1,description=$2,image_url=$3,health=$4,fuel = $5,speed = $6,rating= $7 WHERE id=$8",  [name, description, image_url, health, fuel 
-      , speed, rating, id], function(err:any){
-        if(err){
-          return res.status(400).json(err)
-        }
-        else{
-          return res.status(200).json({"mssg":"Succesful Update"})
-        }
-      })
+  db.all("UPDATE rockets SET name=$1,description=$2,image_url=$3,health=$4,fuel = $5,speed = $6,rating= $7 WHERE id=$8",  [name, description, image_url, health, fuel 
+    , speed, rating, id], function(err:any){
+      if(err){
+        return res.status(400).json(err)
+      }
+      else{
+        return res.status(200).json({"msg":"Succesful Update"})
+      }
+    })
 }
 
 // Called after a game, to save final state to blockchain
@@ -124,8 +152,8 @@ async function getRocket(req:Request, res:Response){
     if (newData.length < 1) {
       res.status(400).json({message: "This user doesn't have a rocket."})
     }
-    // Insert rocket into DB for duration of game
-    console.log(db.all(`INSERT INTO rockets(id, name, description, image_url, health, fuel, speed, rating) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`, [newData[0].token_id, newData[0].name, newData[0].description, newData[0].image_url, newData[0].metadata.health, newData[0].metadata.fuel, newData[0].metadata.speed, newData[0].metadata.rating]))
+
+    db.all(`INSERT INTO rockets(id, name, description, user_id, image_url, health, fuel, speed, rating) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`, [newData[0].token_id, newData[0].name, newData[0].description, newData[0].user, newData[0].image_url, newData[0].metadata.health, newData[0].metadata.fuel, newData[0].metadata.speed, newData[0].metadata.rating])
 
     return res.status(200).json(newData);
   }
@@ -164,7 +192,7 @@ async function getRocketByid(req: Request, res: Response) {
 export {
     getRocket,
     getRocketByid,
-    createRocket, 
-    updateRocket
+    createRocket,
+    pushRocketToBlockchain
 }
 

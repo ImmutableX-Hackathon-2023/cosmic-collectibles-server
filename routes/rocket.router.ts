@@ -1,17 +1,18 @@
 import { Router  } from 'express';
-import { getRocket, createRocket, getRocketByid, updateRocket } from './rocket.controller';
+import { getRocket, createRocket, getRocketByid, pushRocketToBlockchain } from './rocket.controller';
  const middlewareFuncs= require('../middleware/checkWalletHeader')
-const createRouter = Router();
+const rocketRouter = Router();
 
-createRouter.post('/', createRocket)
-createRouter.use(middlewareFuncs.checkWalletHeader)
+rocketRouter.post('/', createRocket)
+rocketRouter.use(middlewareFuncs.checkWalletHeader)
 // Create and receive a new rocket
 
-createRouter.get('/', getRocket)
+rocketRouter.get('/', getRocket)
 
-createRouter.post('/updateMetaData', updateRocket)
+rocketRouter.get('/push', pushRocketToBlockchain)
 
-createRouter.get('/:id', getRocketByid)
+rocketRouter.get('/:id', getRocketByid)
 
 
-export default createRouter
+
+export default rocketRouter
