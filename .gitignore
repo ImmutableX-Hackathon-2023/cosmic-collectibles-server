@@ -1,0 +1,3 @@
+# Hardhat files
+node_modules
+/.env

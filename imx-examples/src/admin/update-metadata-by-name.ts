@@ -3,6 +3,7 @@ import { Wallet } from '@ethersproject/wallet';
 import { ImLogger, WinstonLogger } from '@imtbl/imlogging';
 import {
   ImmutableXClient,
+  MetadataTypes,
   UpdateMetadataSchemaByNameParams,
 } from '@imtbl/imx-sdk';
 import { requireEnvironmentVariable } from 'libs/utils';
@@ -49,9 +50,9 @@ const component = '[IMX-UPDATE-COLLECTION-METADATA-SCHEMA]';
    * Edit your values here
    */
   const params: UpdateMetadataSchemaByNameParams = {
-    name: 'UPDATED_NAME',
-    // type: MetadataTypes.Text,
-    // filterable: true,
+    name: 'Health',
+    type: MetadataTypes.Discrete,
+    filterable: true,
   };
 
   const message = await user.updateMetadataSchemaByName(

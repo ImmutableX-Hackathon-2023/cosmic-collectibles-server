@@ -2,7 +2,7 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import http from 'http';
-import createRouter from './routes/create.router';
+import rocketRouter from './routes/rocket.router';
 
 const app = express();
 
@@ -11,9 +11,14 @@ app.use(helmet({
     crossOriginResourcePolicy: false,
 }))
 app.use(cors())
-app.use('/create', createRouter)
+app.use('/rocket', rocketRouter)
 app.use(express.json());
 app.use(express.urlencoded({extended: false}))
+
+
+app.listen(4000, ()=> {
+    console.log("Server is running!")
+});
 
 
 

@@ -35,13 +35,13 @@ const component = '[IMX-CREATE-COLLECTION]';
    * Edit your values here
    */
   const params: CreateCollectionParams = {
-    name: 'ENTER_COLLECTION_NAME',
+    name: 'COSMIC-COLLECTIBLES',
     // description: 'ENTER_COLLECTION_DESCRIPTION (OPTIONAL)',
     contract_address: collectionContractAddress,
     owner_public_key: ownerPublicKey,
-    // icon_url: '',
-    // metadata_api_url: '',
-    // collection_image_url: '',
+    icon_url: 'https://gateway.pinata.cloud/ipfs/QmfBZy7jNQkZ1EKnCjfVTw314ketj2KCV9ApY6feB3fxzA?_gl=1*o778i9*_ga*Mzg2NTExMTM3LjE2NzYxNDE3NjU.*_ga_5RMPXG14TE*MTY3NjE1Njg3My4yLjAuMTY3NjE1Njg4MS41Mi4wLjA.',
+    metadata_api_url: 'https://gateway.pinata.cloud/ipfs/QmRhiBNCvHTdsvB2rCZGJcTDR6Qjtx2fmr27yWWm5nHrBZ/?_gl=1*e5ybd7*_ga*Mzg2NTExMTM3LjE2NzYxNDE3NjU.*_ga_5RMPXG14TE*MTY3NjE1Njg3My4yLjAuMTY3NjE1Njg4MS41Mi4wLjA.',
+    collection_image_url: 'https://gateway.pinata.cloud/ipfs/QmfBZy7jNQkZ1EKnCjfVTw314ketj2KCV9ApY6feB3fxzA?_gl=1*o778i9*_ga*Mzg2NTExMTM3LjE2NzYxNDE3NjU.*_ga_5RMPXG14TE*MTY3NjE1Njg3My4yLjAuMTY3NjE1Njg4MS41Mi4wLjA.',
     project_id: parseInt(projectId, 10),
   };
 

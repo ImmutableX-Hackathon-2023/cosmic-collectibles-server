@@ -33,7 +33,7 @@ const component = '[IMX-UPDATE-COLLECTION]';
    * Edit your values here
    */
   const params: UpdateCollectionParams = {
-    name: 'ENTER_UPDATED_COLLECTION_NAME_HERE',
+    name: 'COSMIC-COLLECTIBLES',
   };
 
   let collection;
