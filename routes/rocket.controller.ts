@@ -149,7 +149,7 @@ async function getRocket(req:Request, res:Response){
       res.status(400).json({message: "This user doesn't have a rocket."})
     }
 
-    db.all(`INSERT INTO rockets(id, name, description, user_id, image_url, health, fuel, speed, rating) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`, [newData[0].token_id, newData[0].name, newData[0].description, newData[0].user, newData[0].image_url, newData[0].metadata.health, newData[0].metadata.fuel, newData[0].metadata.speed, newData[0].metadata.rating])
+    // db.all(`INSERT INTO rockets(id, name, description, user_id, image_url, health, fuel, speed, rating) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`, [newData[0].token_id, newData[0].name, newData[0].description, newData[0].user, newData[0].image_url, newData[0].metadata.health, newData[0].metadata.fuel, newData[0].metadata.speed, newData[0].metadata.rating])
 
     return res.status(200).json(newData);
   }
