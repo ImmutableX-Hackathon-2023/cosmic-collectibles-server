@@ -11,6 +11,7 @@ import { toUtf8Bytes } from '@ethersproject/strings';
 import BN from 'bn.js'; // https://www.npmjs.com/package/bn.js
 import * as encUtils from 'enc-utils'; // https://www.npmjs.com/package/enc-utils
 import { MintBodyCodec } from 'imx-sdk';
+import { db } from '../models/seed';
 const config = Config.SANDBOX; // Or Config.PRODUCTION
 const client = new ImmutableX(config);
 
@@ -72,7 +73,7 @@ async function updateRocket(req: Request, res: Response) {
 }
 
 // Called after a game, to save final state to blockchain
-async function syncRocketToBlockchain(req: Request, res: Response) {
+async function pushRocketToBlockchain(req: Request, res: Response) {
 
 }
 
@@ -102,7 +103,12 @@ async function getRocket(req:Request, res:Response){
      const newData= data.data.result.filter((element: allRocketsResult) => {
      return (element.user as string).toLowerCase() === (req.headers.wallet_address as string).toLowerCase();
     })
-    // console.log(newData)
+    if (newData.length < 1) {
+      res.status(400).json({message: "This user doesn't have a rocket."})
+    }
+    // Insert rocket into DB for duration of game
+    console.log(db.all(`INSERT INTO rockets(id, name, description, image_url, health, fuel, speed, rating) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`, [newData[0].token_id, newData[0].name, newData[0].description, newData[0].image_url, newData[0].metadata.health, newData[0].metadata.fuel, newData[0].metadata.speed, newData[0].metadata.rating]))
+
     return res.status(200).json(newData);
   }
   catch(error){
