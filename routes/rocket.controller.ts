@@ -74,6 +74,14 @@ async function updateRocket(req: Request, res: Response) {
 
 // Called after a game, to save final state to blockchain
 async function pushRocketToBlockchain(req: Request, res: Response) {
+  console.log('in push route')
+  console.log(req.headers.wallet_address)
+  let avg;
+  // Calculate a final game rating based on average of attributes, decide if rocket levels up
+  const result = db.all(`SELECT health, fuel, speed FROM rockets WHERE user_id=$1`, [req.headers.wallet_address], (err, rows) => {
+    avg = (((rows[0].health + rows[0].fuel + rows[0].speed) / 3) / 2);
+    res.status(200).json(avg);
+  })
 
 }
 
@@ -105,8 +113,8 @@ async function getRocket(req:Request, res:Response){
     if (newData.length < 1) {
       res.status(400).json({message: "This user doesn't have a rocket."})
     }
-    // Insert rocket into DB for duration of game
-    console.log(db.all(`INSERT INTO rockets(id, name, description, image_url, health, fuel, speed, rating) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`, [newData[0].token_id, newData[0].name, newData[0].description, newData[0].image_url, newData[0].metadata.health, newData[0].metadata.fuel, newData[0].metadata.speed, newData[0].metadata.rating]))
+
+    db.all(`INSERT INTO rockets(id, name, description, user_id, image_url, health, fuel, speed, rating) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`, [newData[0].token_id, newData[0].name, newData[0].description, newData[0].user, newData[0].image_url, newData[0].metadata.health, newData[0].metadata.fuel, newData[0].metadata.speed, newData[0].metadata.rating])
 
     return res.status(200).json(newData);
   }
@@ -138,6 +146,7 @@ async function getRocketByid(req: Request, res: Response) {
 export {
     getRocket,
     getRocketByid,
-    createRocket
+    createRocket,
+    pushRocketToBlockchain
 }
 

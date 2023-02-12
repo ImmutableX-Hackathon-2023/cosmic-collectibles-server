@@ -14,6 +14,7 @@ import {Express, Request, Response, NextFunction} from 'express';
 const checkWalletHeader = (req:Request, res:Response, next:NextFunction) => {
     if(req.headers.wallet_address && req.headers.wallet_address[0]){
         console.log("request has wallet_address pass onto route")
+        req.headers.wallet_address = (req.headers.wallet_address as string).toLowerCase()
         next();
     }
     //request has no wallet address header
