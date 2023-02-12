@@ -68,8 +68,27 @@ async function createRocket(req: Request, res: Response) {
 }
 
 // Called during the game to update rocket attributes we need in real time.
-async function updateRocket(req: Request, res: Response) {  
+function updateRocket(req: Request, res: Response) {  
+    console.log("In updateRocket")
+    console.log(req.body)
+  const {id, name, description, image_url, health, fuel , speed, rating}= req.body;
+  
+    console.log(req.body)
+    console.log(`id:${id}`);
+    console.log(`description:${description}`);
 
+
+
+
+    db.all("UPDATE rockets SET name=$1,description=$2,image_url=$3,health=$4,fuel = $5,speed = $6,rating= $7 WHERE id=$8",  [name, description, image_url, health, fuel 
+      , speed, rating, id], function(err:any){
+        if(err){
+          return res.status(400).json(err)
+        }
+        else{
+          return res.status(200).json({"mssg":"Succesful Update"})
+        }
+      })
 }
 
 // Called after a game, to save final state to blockchain
@@ -141,6 +160,13 @@ async function getRocketByid(req: Request, res: Response) {
         return res.status(400).json(error)
       }
 }
+
+
+
+// async function updateRocket(req:Request, res:Response){
+
+
+// }
 
 
 export {
